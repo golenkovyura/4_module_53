@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
-
-from django.contrib.auth import authenticate, login
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 
 def login_view(request):
@@ -20,9 +20,11 @@ def login_view(request):
     return render(request, 'app_auth/login.html')
 
 
+@login_required(login_url=reverse_lazy('login'))
 def profile_view(request):
     return render(request, 'app_auth/profile.html')
 
 
 def logout_view(request):
-    pass
+    logout(request)
+    return redirect(reverse('login'))
