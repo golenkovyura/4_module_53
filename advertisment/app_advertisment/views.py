@@ -6,8 +6,14 @@ from django.urls import reverse, reverse_lazy
 
 
 def index(request):
-    advertisements = Advertisement.objects.all()
-    context = {'advertisements': advertisements}
+    title = request.GET.get('query')
+    if title:
+        advertisements = Advertisement.objects.filter(title__icontains=title)
+    else:
+        advertisements = Advertisement.objects.all()
+    context = {'advertisements': advertisements,
+               'title': title,
+               }
     return render(request, 'app_advertisement/index.html', context)
 
 
